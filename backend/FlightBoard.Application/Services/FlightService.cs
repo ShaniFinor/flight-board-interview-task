@@ -10,7 +10,7 @@ namespace FlightBoard.Application.Services
             if (now >= departureTime.AddMinutes(-30) && now < departureTime) return FlightStatus.Boarding;
             if (now >= departureTime && now <= departureTime.AddHours(1)) return FlightStatus.Departed;
             if (now > departureTime.AddHours(1)) return FlightStatus.Landed;
-            return FlightStatus.Landed;
+            return FlightStatus.Scheduled;
         }
     }
 }
