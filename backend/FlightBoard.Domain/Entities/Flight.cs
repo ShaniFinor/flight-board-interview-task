@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 namespace FlightBoard.Domain.Entities
 {
     public class Flight

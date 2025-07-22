@@ -7,10 +7,10 @@ namespace FlightBoard.Application.Validators
     {
         public FlightValidator()
         {
-            RoleFor(f => f.FlightNumber).NoEmpty().WithMessage("Flight number is required.");
-            RoleFor(f => f.Destination).NoEmpty().WithMessage("Destination is required.");
-            RoleFor(f => f.DepartureTime).GreaterThan(DateTime.UtcNow).WithMessage("Departure time must be in the future.");
-            RoleFor(f => f.Gate).NoEmpty().WithMessage("Gate is required.");
+            RuleFor(f => f.FlightNumber).NotEmpty().WithMessage("Flight number is required.");
+            RuleFor(f => f.Destination).NotEmpty().WithMessage("Destination is required.");
+            RuleFor(f => f.DepartureTime).GreaterThan(DateTime.UtcNow).WithMessage("Departure time must be in the future.");
+            RuleFor(f => f.Gate).NotEmpty().WithMessage("Gate is required.");
         }
     }
 }
