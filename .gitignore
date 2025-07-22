@@ -1,0 +1,13 @@
+# .NET build artifacts
+bin/
+obj/
+
+# Node.js modules
+node_modules/
+
+# Environment variables
+.env
+
+# OS junk files
+.DS_Store
+Thumbs.db
