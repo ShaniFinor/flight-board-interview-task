@@ -25,6 +25,7 @@
     <ProjectReference Include="..\FlightBoard.Application\FlightBoard.Application.csproj" />
     <ProjectReference Include="..\FlightBoard.Domain\FlightBoard.Domain.csproj" />
     <ProjectReference Include="..\FlightBoard.Infrastructure\FlightBoard.Infrastructure.csproj" />
+    <ProjectReference Include="..\FlightBoard.Api\FlightBoard.Api.csproj" />
   </ItemGroup>
 
 </Project>

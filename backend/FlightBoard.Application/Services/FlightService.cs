@@ -11,7 +11,7 @@ namespace FlightBoard.Application.Services
             _repository = repository;
         }
 
-        public async Task<List<Flight>> GetFlightsWithStatusAsync()
+        public virtual async Task<List<Flight>> GetFlightsWithStatusAsync()
         {
             var flights = await _repository.GetAllFlightsAsync();
 
