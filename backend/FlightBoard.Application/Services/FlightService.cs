@@ -14,7 +14,6 @@ namespace FlightBoard.Application.Services
         public async Task<List<Flight>> GetFlightsWithStatusAsync()
         {
             var flights = await _repository.GetAllFlightsAsync();
-            var now = DateTime.UtcNow;
 
             foreach (var flight in flights)
             {
@@ -23,7 +22,7 @@ namespace FlightBoard.Application.Services
 
             return flights;
         }
-        private string GetStatus(DateTime departureTime)
+        public string GetStatus(DateTime departureTime)
         {
             var now = DateTime.UtcNow;
             var diff = departureTime - now;

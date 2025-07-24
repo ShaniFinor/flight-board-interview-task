@@ -1,19 +1,30 @@
 using FlightBoard.Application.Services;
 using FlightBoard.Domain.Enums;
+using FlightBoard.Infrastructure.Repositories;
 using Xunit;
 
 namespace FlightBoard.Tests.Application.Services
 {
     public class FlightServiceTests
     {
-        private readonly FlightService _service = new();
+       private class FakeRepository : FlightRepository
+        {
+            public FakeRepository() : base(null!) { }
+        }
+
+        private readonly FlightService _service;
+
+        public FlightServiceTests()
+        {
+            _service = new FlightService(new FakeRepository());
+        }
 
         [Fact]
         public void GetStatus_ReturnsBoarding_WhenWithin30MinutesOfDeparture()
         {
             var departure = DateTime.UtcNow.AddMinutes(15);
             var status = _service.GetStatus(departure);
-            Assert.Equal(FlightStatus.Boarding, status);
+            Assert.Equal(FlightStatus.Boarding.ToString(), status);
         }
 
         [Fact]
@@ -21,7 +32,7 @@ namespace FlightBoard.Tests.Application.Services
         {
             var departure = DateTime.UtcNow.AddMinutes(-30);
             var status = _service.GetStatus(departure);
-            Assert.Equal(FlightStatus.Departed, status);
+            Assert.Equal(FlightStatus.Departed.ToString(), status);
         }
 
         [Fact]
@@ -29,7 +40,7 @@ namespace FlightBoard.Tests.Application.Services
         {
             var departure = DateTime.UtcNow.AddHours(-2);
             var status = _service.GetStatus(departure);
-            Assert.Equal(FlightStatus.Landed, status);
+            Assert.Equal(FlightStatus.Landed.ToString(), status);
         }
 
         [Fact]
@@ -37,7 +48,7 @@ namespace FlightBoard.Tests.Application.Services
         {
             var departure = DateTime.UtcNow.AddHours(2);
             var status = _service.GetStatus(departure);
-            Assert.Equal(FlightStatus.Scheduled, status);
+            Assert.Equal(FlightStatus.Scheduled.ToString(), status);
         }
     }
 }
