@@ -11,40 +11,88 @@ namespace FlightBoard.Tests.Api.Controllers
         private class FakeFlightService : FlightService
         {
             public FakeFlightService() : base(null!) { }
+
             public override Task<List<Flight>> GetFlightsWithStatusAsync()
             {
-                            var flights = new List<Flight>
+                return Task.FromResult(new List<Flight>
                 {
-                    new Flight
-                    {
-                        FlightNumber = "AA123",
-                        Destination = "Paris",
-                        DepartureTime = DateTime.UtcNow.AddHours(1),
-                        Gate = "A2",
-                        Status = "Boarding"
-                    }
-                };
-
-                return Task.FromResult(flights);
+                    new Flight { FlightNumber = "AA123", Destination = "Paris", DepartureTime = DateTime.UtcNow.AddHours(1), Gate = "A2", Status = "Boarding" }
+                });
             }
+
+            public override Task<Flight?> GetFlightAsync(string flightNumber)
+            {
+                if (flightNumber == "AA123")
+                {
+                    return Task.FromResult<Flight?>(new Flight { FlightNumber = "AA123", Destination = "Paris", DepartureTime = DateTime.UtcNow, Gate = "A2", Status = "Scheduled" });
+                }
+                return Task.FromResult<Flight?>(null);
+            }
+
+            public override Task AddFlightAsync(Flight flight) => Task.CompletedTask;
+            public override Task DeleteFlightAsync(string flightNumber) => Task.CompletedTask;
         }
 
         [Fact]
-        public async Task GetFlights_ReturnsFlightsFromService()
+        public async Task GetFlights_ReturnsListOfFlights()
         {
-            // Arrange
-            var fakeService = new FakeFlightService();
-            var controller = new FlightsController(fakeService);
+            var controller = new FlightsController(new FakeFlightService());
 
-            // Act
             var result = await controller.GetFlights();
 
-            // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            var flights = Assert.IsAssignableFrom<List<Flight>>(okResult.Value);
-            Assert.Single(flights);
-            Assert.Equal("AA123", flights[0].FlightNumber);
-            Assert.Equal("Paris", flights[0].Destination);
+            var ok = Assert.IsType<OkObjectResult>(result.Result);
+            var list = Assert.IsAssignableFrom<List<Flight>>(ok.Value);
+            Assert.Single(list);
+        }
+
+        [Fact]
+        public async Task GetFlight_ReturnsCorrectFlight()
+        {
+            var controller = new FlightsController(new FakeFlightService());
+
+            var result = await controller.GetFlight("AA123");
+
+            var ok = Assert.IsType<OkObjectResult>(result.Result);
+            var flight = Assert.IsType<Flight>(ok.Value);
+            Assert.Equal("AA123", flight.FlightNumber);
+        }
+
+        [Fact]
+        public async Task GetFlight_ReturnsNotFound_WhenMissing()
+        {
+            var controller = new FlightsController(new FakeFlightService());
+
+            var result = await controller.GetFlight("ZZ999");
+
+            Assert.IsType<NotFoundResult>(result.Result);
+        }
+
+        [Fact]
+        public async Task AddFlight_ReturnsCreatedAt()
+        {
+            var controller = new FlightsController(new FakeFlightService());
+
+            var result = await controller.AddFlight(new Flight
+            {
+                FlightNumber = "BB456",
+                Destination = "Berlin",
+                DepartureTime = DateTime.UtcNow.AddMinutes(20),
+                Gate = "B1"
+            });
+
+            var created = Assert.IsType<CreatedAtActionResult>(result);
+            var added = Assert.IsType<Flight>(created.Value);
+            Assert.Equal("BB456", added.FlightNumber);
+        }
+
+        [Fact]
+        public async Task DeleteFlight_ReturnsNoContent()
+        {
+            var controller = new FlightsController(new FakeFlightService());
+
+            var result = await controller.DeleteFlight("AA123");
+
+            Assert.IsType<NoContentResult>(result);
         }
     }
 }
