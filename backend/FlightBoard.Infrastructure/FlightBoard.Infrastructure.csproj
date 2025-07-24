@@ -15,4 +15,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FlightBoard.Domain\FlightBoard.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
