@@ -94,5 +94,42 @@ namespace FlightBoard.Tests.Api.Controllers
 
             Assert.IsType<NoContentResult>(result);
         }
+        [Fact]
+        public async Task SearchFlights_ReturnsMatchingFlights()
+        {
+            // Arrange
+            var fakeService = new FakeFlightServiceWithSearch();
+            var controller = new FlightsController(fakeService);
+        
+            // Act
+            var result = await controller.SearchFlights("Boarding", "Paris");
+        
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result.Result);
+            var flights = Assert.IsAssignableFrom<List<Flight>>(okResult.Value);
+            Assert.Single(flights);
+            Assert.Equal("AA123", flights[0].FlightNumber);
+        }
+        
+        private class FakeFlightServiceWithSearch : FlightService
+        {
+            public FakeFlightServiceWithSearch() : base(null!) { }
+        
+            public override Task<List<Flight>> SearchFlightsAsync(string? status, string? destination)
+            {
+                var flights = new List<Flight>
+                {
+                    new Flight { FlightNumber = "AA123", Destination = "Paris", DepartureTime = DateTime.UtcNow.AddMinutes(20), Gate = "A2", Status = "Boarding" },
+                    new Flight { FlightNumber = "BB234", Destination = "Berlin", DepartureTime = DateTime.UtcNow.AddHours(2), Gate = "B1", Status = "Scheduled" }
+                };
+        
+                return Task.FromResult(
+                    flights.Where(f =>
+                        (string.IsNullOrEmpty(status) || f.Status == status) &&
+                        (string.IsNullOrEmpty(destination) || f.Destination == destination)
+                    ).ToList()
+                );
+            }
+        }
     }
 }

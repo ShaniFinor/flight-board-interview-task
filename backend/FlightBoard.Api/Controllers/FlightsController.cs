@@ -43,5 +43,11 @@ namespace FlightBoard.Api.Controllers
             await _flightService.DeleteFlightAsync(flightNumber);
             return NoContent();
         }
+        [HttpGet("search")]
+        public async Task<ActionResult<List<Flight>>> SearchFlights([FromQuery] string? status, [FromQuery] string? destination)
+        {
+            var result = await _flightService.SearchFlightsAsync(status, destination);
+            return Ok(result);
+        }
     }
 }

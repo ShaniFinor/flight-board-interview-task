@@ -6,7 +6,7 @@ namespace FlightBoard.Application.Services
     public class FlightService
     {
         private readonly FlightRepository _repository;
-         public FlightService(FlightRepository repository)
+        public FlightService(FlightRepository repository)
         {
             _repository = repository;
         }
@@ -22,7 +22,7 @@ namespace FlightBoard.Application.Services
 
             return flights;
         }
-          public virtual async Task<Flight?> GetFlightAsync(string flightNumber)
+        public virtual async Task<Flight?> GetFlightAsync(string flightNumber)
         {
             var flight = await _repository.GetFlightAsync(flightNumber);
             if (flight != null)
@@ -55,6 +55,24 @@ namespace FlightBoard.Application.Services
                 return "Departed";
 
             return "Landed";
+        }
+        
+        public virtual async Task<List<Flight>> SearchFlightsAsync(string? status, string? destination)
+        {
+            var flights = await _repository.GetAllFlightsAsync();
+
+            foreach (var flight in flights)
+            {
+                flight.Status = GetStatus(flight.DepartureTime);
+            }
+
+            if (!string.IsNullOrEmpty(status))
+                flights = flights.Where(f => f.Status?.Equals(status, StringComparison.OrdinalIgnoreCase) == true).ToList();
+
+            if (!string.IsNullOrEmpty(destination))
+                flights = flights.Where(f => f.Destination.Equals(destination, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            return flights;
         }
         
     }
