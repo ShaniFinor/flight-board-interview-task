@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FlightBoard.Infrastructure\FlightBoard.Infrastructure.csproj" />
+    <ProjectReference Include="..\FlightBoard.Application\FlightBoard.Application.csproj" />
   </ItemGroup>
 
 </Project>

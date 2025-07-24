@@ -14,5 +14,7 @@ namespace FlightBoard.Domain.Entities
 
         [Required]
         public string Gate { get; set; } = string.Empty;
+
+        public string? Status { get; set; } // Calculated in service
     }
 }

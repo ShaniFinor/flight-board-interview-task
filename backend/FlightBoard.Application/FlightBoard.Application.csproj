@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FlightBoard.Domain\FlightBoard.Domain.csproj" />
+    <ProjectReference Include="..\FlightBoard.Infrastructure\FlightBoard.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
