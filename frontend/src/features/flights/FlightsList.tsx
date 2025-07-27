@@ -1,12 +1,33 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFlights } from "./api";
 import { Flight } from "./flight";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteFlight } from "./api";
+import { connection } from './signalR';
 
 const FlightsList = () => {
     const { data: flights, isLoading, isError } = useFlights();
     const queryClient = useQueryClient();
+
+    // Listen to events that in the server - FlightAdded, FlightDeleted.
+    useEffect(() => {
+        if (connection.state === 'Disconnected') {
+            connection.start().catch(err => console.error('SignalR Connection Error: ', err));
+        }
+
+        connection.on('FlightAdded', () => {
+            queryClient.invalidateQueries({ queryKey: ['flights'] });
+        });
+
+        connection.on('FlightDeleted', () => {
+            queryClient.invalidateQueries({ queryKey: ['flights'] });
+        });
+
+        return () => {
+            connection.off('FlightAdded');
+            connection.off('FlightDeleted');
+        };
+    }, []);
 
     const deleteMutation = useMutation({
         mutationFn: deleteFlight,
@@ -15,7 +36,7 @@ const FlightsList = () => {
             queryClient.invalidateQueries({ queryKey: ['flights'] });
         }
     });
-    
+
     if (isLoading) {
         return <p>Loading Flights.</p>
     }

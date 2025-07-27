@@ -33,7 +33,7 @@ export default function AddFlightForm() {
         e.preventDefault();
         mutation.mutate({
             ...formData,
-            departureTime: new Date(formData.departureTime).toISOString(),
+            departureTime: formData.departureTime,
         });
     }
 
