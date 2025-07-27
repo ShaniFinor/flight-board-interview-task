@@ -34,3 +34,9 @@ export async function addFlight(flight: Omit<Flight, 'status'>): Promise<Flight>
 
   return response.json();
 }
+
+export const deleteFlight = async (flightNumber: string) => {
+  await fetch(`/api/flights/${flightNumber}`, {
+    method: 'DELETE'
+  });
+};
