@@ -40,3 +40,22 @@ export const deleteFlight = async (flightNumber: string) => {
     method: 'DELETE'
   });
 };
+
+export const searchFlights = async (filters: { status?: string; destination?: string }) => {
+  const params = new URLSearchParams();
+  if (filters.status) params.append("status", filters.status);
+  if (filters.destination) params.append("destination", filters.destination);
+
+  const response = await fetch(`/api/flights/search?${params.toString()}`);
+  if (!response.ok) throw new Error("Failed to search flights");
+  return response.json();
+};
+
+
+export const useSearchFlights = (filters: { status?: string; destination?: string }) => {
+  return useQuery<Flight[]>({
+    queryKey: ['flights', filters],
+    queryFn: () => searchFlights(filters),
+    enabled: !!(filters.status || filters.destination), //if have filters
+  });
+};
