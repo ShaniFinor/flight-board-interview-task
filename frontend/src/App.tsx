@@ -1,11 +1,10 @@
 import React from 'react';
 import './App.css';
+import FlightsPage from './pages/FlightsPage';
 
 function App() {
   return (
-    <div className="App">
-      <h1>Flight Board</h1>
-    </div>
+    <FlightsPage />
   );
 }
 
