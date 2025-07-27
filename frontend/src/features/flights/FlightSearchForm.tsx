@@ -11,10 +11,13 @@ const FlightSearchForm = ({ onSearch, onClear }: Props) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSearch({
-      status: status || undefined,
-      destination: destination || undefined,
-    });
+     onSearch({ status, destination });
+  };
+
+   const handleClear = () => {
+    setStatus('');
+    setDestination('');
+    onClear();
   };
 
   return (
@@ -35,7 +38,7 @@ const FlightSearchForm = ({ onSearch, onClear }: Props) => {
       />
 
       <button type="submit">Search</button>
-      <button type="button" onClick={onClear}>Clear Filters</button>
+      <button type="button" onClick={handleClear}>Clear Filters</button>
     </form>
   );
 };

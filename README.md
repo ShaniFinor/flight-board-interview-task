@@ -36,7 +36,6 @@ Framer Motion for animations.
 Backend - 
 Microsoft.EntityFrameworkCore.Sqlite
 Microsoft.AspNetCore.SignalR
-Swashbuckle.AspNetCore (Swagger)
 Moq, xUnit (Testing)
 
 Frontend-
