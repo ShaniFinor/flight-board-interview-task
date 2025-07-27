@@ -3,6 +3,9 @@ using FlightBoard.Infrastructure.Data;
 using FlightBoard.Application.Services;
 using Microsoft.EntityFrameworkCore;
 using FlightBoard.Api.Hubs;
+using Microsoft.AspNetCore.SignalR;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,9 +18,16 @@ builder.Services.AddScoped<FlightRepository>();
 builder.Services.AddScoped<FlightService>();
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.JsonSerializerOptions.Converters.Add(new JsonDateTimeUtcConverter());
+    });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 builder.Services.AddSignalR();
 

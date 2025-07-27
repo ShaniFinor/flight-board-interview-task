@@ -18,3 +18,19 @@ export const useFlights = () => {
     queryFn: fetchFlights,
   });
 };
+
+export async function addFlight(flight: Omit<Flight, 'status'>): Promise<Flight> {
+  const response = await fetch('http://localhost:5264/api/flights', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(flight),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to add flight');
+  }
+
+  return response.json();
+}
