@@ -31,10 +31,32 @@ export default function AddFlightForm() {
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
+
+        if (!isFormValid()) {
+            alert("Please fill all fields correctly. Make sure departure time is in the future.");
+            return;
+        }
+
         mutation.mutate({
             ...formData,
             departureTime: formData.departureTime,
         });
+    }
+
+    function isFormValid() {
+        const { flightNumber, destination, departureTime, gate } = formData;
+
+        if (!flightNumber.trim() || !destination.trim() || !gate.trim()) {
+            return false;
+        }
+
+        const now = new Date();
+        const departure = new Date(departureTime);
+        if (isNaN(departure.getTime()) || departure <= now) {
+            return false;
+        }
+
+        return true;
     }
 
     return (
