@@ -4,6 +4,7 @@ import { Flight } from "./flight";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { connection } from './signalR';
 import FlightSearchForm from "./FlightSearchForm";
+import { motion, AnimatePresence } from "framer-motion"; //fade/slide-in animation for rows.
 
 const FlightsList = () => {
     const queryClient = useQueryClient();
@@ -30,8 +31,23 @@ const FlightsList = () => {
     };
     const deleteMutation = useMutation({
         mutationFn: deleteFlight,
-        onSuccess: () => {
-            // refresh the flight list after the delete.
+        onMutate: async (flightNumber) => {
+            await queryClient.cancelQueries({ queryKey: ['flights'] });
+
+            const previous = queryClient.getQueryData<Flight[]>(['flights']);
+
+            queryClient.setQueryData<Flight[]>(['flights'], (old = []) =>
+                old.filter(f => f.flightNumber !== flightNumber)
+            );
+
+            return { previous };
+        },
+        onError: (err, flightNumber, context) => {
+            if (context?.previous) {
+                queryClient.setQueryData(['flights'], context.previous);
+            }
+        },
+        onSettled: () => {
             queryClient.invalidateQueries({ queryKey: ['flights'] });
         }
     });
@@ -56,6 +72,19 @@ const FlightsList = () => {
         };
     }, []);
 
+    const getStatusColor = (status: string) => {
+        switch (status) {
+            case "Boarding":
+                return "#fff3cd"; // yellow
+            case "Departed":
+                return "#d1ecf1"; // light blue
+            case "Landed":
+                return "#d4edda"; //green
+            case "Scheduled":
+            default:
+                return "#f8f9fa"; // gray
+        }
+    };
 
     if (isLoading) {
         return <p>Loading Flights.</p>
@@ -86,23 +115,37 @@ const FlightsList = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {safeFlights.map((flight: Flight) => (
-                        <tr key={flight.flightNumber}>
-                            <td>{flight.flightNumber}</td>
-                            <td>{flight.destination}</td>
-                            <td> {new Date(flight.departureTime).toLocaleString('he-IL', {
-                                dateStyle: 'short',
-                                timeStyle: 'short'
-                            })}</td>
-                            <td>{flight.gate}</td>
-                            <td>{flight.status}</td>
-                            <td>
-                                <button onClick={() => handleDelete(flight.flightNumber)} style={{ color: 'red' }}>
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
+                    <AnimatePresence>
+                        {safeFlights.map((flight: Flight) => (
+                            <motion.tr
+                                key={flight.flightNumber}
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, x: -20 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <td>{flight.flightNumber}</td>
+                                <td>{flight.destination}</td>
+                                <td> {new Date(flight.departureTime).toLocaleString('he-IL', {
+                                    dateStyle: 'short',
+                                    timeStyle: 'short'
+                                })}</td>
+                                <td>{flight.gate}</td>
+                                <motion.td
+                                    layout
+                                    animate={{ backgroundColor: getStatusColor(flight.status) }}
+                                    transition={{ duration: 0.5 }}
+                                >
+                                    {flight.status}
+                                </motion.td>
+                                <td>
+                                    <button onClick={() => handleDelete(flight.flightNumber)} style={{ color: 'red' }}>
+                                        Delete
+                                    </button>
+                                </td>
+                            </motion.tr>
+                        ))}
+                    </AnimatePresence>
                 </tbody>
             </table>)}
     </>);
