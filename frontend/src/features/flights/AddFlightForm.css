@@ -1,0 +1,33 @@
+.form-add-flight {
+    margin: 1rem auto;
+    text-align: center;
+}
+
+    .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: flex-start;
+        justify-content: center;
+
+    }
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        min-width: 150px;
+
+
+    }
+    .form-input {
+        padding: 8px;
+        font-size: 1rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .error {
+        min-height: 1.2em;
+        font-size: 0.85rem;
+        color: red;
+        margin-top: 4px;
+    }
