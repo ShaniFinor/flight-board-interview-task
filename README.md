@@ -4,7 +4,6 @@ It includes a .NET 8 backend and a React frontend with SignalR integration.
 
 ## Setup and Run Instructions
 ### Backend:
-Ensure you have .NET 8 SDK.
 run:
 cd backend
 dotnet restore
@@ -24,6 +23,9 @@ The backend is structured using Clean Architecture:
 Domain, Application, Infrastructure, API layers.
 Uses EF Core with a repository pattern.
 SignalR is used for broadcasting flight changes.
+FluentValidation for input validation.
+Structured logging with ILogger<T>.
+Server side Validation using FluentValidation -FlightValidator.cs
 
 ## Frontend:
 React for the UI.
@@ -31,6 +33,8 @@ Redux Toolkit for minimal local state management.
 TanStack Query (React Query) for API calls.
 SignalR for real-time updates.
 Framer Motion for animations.
+SignalR client for live updates.
+Client side validation - AddFlightForm.tsx.
 
 ## Third-Party Libraries:
 Backend - 
@@ -45,3 +49,13 @@ typescript
 @tanstack/react-query
 @microsoft/signalr
 framer-motion
+testing-library/react, jest
+
+## Features:
+Real-time flight board with SignalR.
+Add/Delete/Search flights.
+Optimistic UI updates with React Query.
+Client-side + server-side validations.
+Clean Architecture & separation of concerns.
+Structured logging & test.
+Docker support for full containerization.
