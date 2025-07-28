@@ -6,6 +6,9 @@ using FlightBoard.Api.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using FluentValidation.AspNetCore;
+using FluentValidation;
+using FlightBoard.Application.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +20,8 @@ builder.Services.AddDbContext<FlightDbContext>(options =>
 builder.Services.AddScoped<FlightRepository>();
 builder.Services.AddScoped<FlightService>();
 
+builder.Services.AddValidatorsFromAssemblyContaining<FlightValidator>();
+builder.Services.AddFluentValidationAutoValidation();
 // Add services to the container.
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
