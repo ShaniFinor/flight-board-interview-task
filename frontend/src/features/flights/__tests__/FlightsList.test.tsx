@@ -2,6 +2,8 @@ import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import FlightsList from '../FlightsList';
+import { Provider } from 'react-redux';
+import { store } from '../../../app/store';
 
 //useFlights,api mock
 jest.mock('../api', () => ({
@@ -34,7 +36,9 @@ const queryClient = new QueryClient();
 test('displays no flights message when list is empty', () => {
   render(
     <QueryClientProvider client={queryClient}>
-      <FlightsList />
+      <Provider store={store}>
+        <FlightsList />
+      </Provider>
     </QueryClientProvider>
   );
 

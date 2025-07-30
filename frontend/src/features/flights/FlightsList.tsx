@@ -1,3 +1,4 @@
+//components/..
 import React, { useEffect, useState } from "react";
 import { useFlights, deleteFlight, useSearchFlights } from "./api";
 import { Flight } from "./flight";
@@ -5,6 +6,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { connection } from './signalR';
 import FlightSearchForm from "./FlightSearchForm";
 import { motion, AnimatePresence } from "framer-motion"; //fade/slide-in animation for rows.
+import { useDispatch } from "react-redux";
+import { selectFlight } from "./flightsSlice";
 
 const FlightsList = () => {
     const queryClient = useQueryClient();
@@ -12,10 +15,13 @@ const FlightsList = () => {
     const showFiltered = !!(filters.status || filters.destination);
     const flightsQuery = useFlights();
     const filteredQuery = useSearchFlights(filters);
+    const dispatch = useDispatch();
 
     const flights = showFiltered ? filteredQuery.data : flightsQuery.data;
     const isLoading = showFiltered ? filteredQuery.isLoading : flightsQuery.isLoading;
     const isError = showFiltered ? filteredQuery.isError : flightsQuery.isError;
+
+
     const handleDelete = (flightNumber: string) => {
         deleteMutation.mutate(flightNumber);
     };
@@ -33,9 +39,10 @@ const FlightsList = () => {
         mutationFn: deleteFlight,
         onMutate: async (flightNumber) => {
             await queryClient.cancelQueries({ queryKey: ['flights'] });
-
+            //getQueryData - saves the cache in case something crashing and need to restore the cache.
             const previous = queryClient.getQueryData<Flight[]>(['flights']);
-
+            //optimistic update - simulates the deletion on the UI, before it got answer from the server.
+            //setQueryData - update the cache.
             queryClient.setQueryData<Flight[]>(['flights'], (old = []) =>
                 old.filter(f => f.flightNumber !== flightNumber)
             );
@@ -141,6 +148,11 @@ const FlightsList = () => {
                                 <td>
                                     <button onClick={() => handleDelete(flight.flightNumber)} style={{ color: 'red' }}>
                                         Delete
+                                    </button>
+                                </td>
+                                <td>
+                                    <button onClick={() => dispatch(selectFlight(flight))}>
+                                        בחר טיסה
                                     </button>
                                 </td>
                             </motion.tr>

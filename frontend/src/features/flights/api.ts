@@ -1,3 +1,4 @@
+//api/..
 // using TanStack Query (React Query) to fetch flights from the server.
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
@@ -12,6 +13,7 @@ export const fetchFlights = async (): Promise<Flight[]> => {
 };
 
 //hook to get the data in components.
+//get flights from the server. save it in inside cache in React Query.
 export const useFlights = () => {
   return useQuery({
     queryKey: ['flights'],

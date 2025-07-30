@@ -1,9 +1,13 @@
+//store/..
 import { configureStore } from "@reduxjs/toolkit";
 import flightsReducer from "../features/flights/flightsSlice";
 
+//Redux store - create state managment 
 export const store = configureStore({
     reducer: {
-        flights: flightsReducer,
+        // slice with the name 'flights' from flightsSlice.ts will be managed by flightsReducer.
+        // every slice is key in the global state 
+        selectedFlight: flightsReducer,
     },
 });
 

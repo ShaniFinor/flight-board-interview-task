@@ -1,6 +1,6 @@
+//store/..
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {Flight} from "./flight";
-
 interface FlightsState{
     selectedFlight: Flight |null;
 }
@@ -9,8 +9,9 @@ const initialState : FlightsState={
     selectedFlight:null,
 };
 
+//save selected flight.
 const flightsSlice = createSlice({
-    name: 'flights',
+    name: 'selectedFlight',
     initialState,
     reducers:{
         selectFlight(state, action: PayloadAction<Flight>){

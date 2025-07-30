@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import FlightSearchForm from '../FlightSearchForm';
 
 describe('FlightSearchForm', () => {
-  it('calls onSearch with correct values', () => {
+  test('calls onSearch with correct values', () => {
     const onSearch = jest.fn();
     const onClear = jest.fn();
 
@@ -24,7 +24,7 @@ describe('FlightSearchForm', () => {
     expect(onSearch).toHaveBeenCalledWith({ status: 'Landed', destination: 'Paris' });
   });
 
-  it('calls onClear and resets fields', () => {
+  test('calls onClear and resets fields', () => {
     const onSearch = jest.fn();
     const onClear = jest.fn();
 

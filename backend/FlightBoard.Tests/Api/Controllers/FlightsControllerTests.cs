@@ -2,10 +2,12 @@ using FlightBoard.Api.Controllers;
 using FlightBoard.Api.Hubs;
 using FlightBoard.Application.Services;
 using FlightBoard.Domain.Entities;
+using FlightBoard.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Moq;
 using Xunit;
+using Microsoft.Extensions.Logging;
 
 namespace FlightBoard.Tests.Api.Controllers
 {
@@ -32,7 +34,7 @@ namespace FlightBoard.Tests.Api.Controllers
 
         private class FakeFlightService : FlightService
         {
-            public FakeFlightService() : base(null!) { }
+            public FakeFlightService() : base(null! , new Mock<ILogger<FlightService>>().Object) { }
 
             public override Task<List<Flight>> GetFlightsWithStatusAsync()
             {

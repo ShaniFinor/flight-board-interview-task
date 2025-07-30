@@ -1,3 +1,4 @@
+//signalR/..
 import * as signalR from '@microsoft/signalr';
 //Hub connecion.
 let connection: signalR.HubConnection;

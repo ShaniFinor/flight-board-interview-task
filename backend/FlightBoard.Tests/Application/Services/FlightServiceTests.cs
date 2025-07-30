@@ -2,12 +2,14 @@ using FlightBoard.Application.Services;
 using FlightBoard.Domain.Enums;
 using FlightBoard.Infrastructure.Repositories;
 using Xunit;
+using Moq;
+using Microsoft.Extensions.Logging;
 
 namespace FlightBoard.Tests.Application.Services
 {
     public class FlightServiceTests
     {
-       private class FakeRepository : FlightRepository
+        private class FakeRepository : FlightRepository
         {
             public FakeRepository() : base(null!) { }
         }
@@ -16,7 +18,7 @@ namespace FlightBoard.Tests.Application.Services
 
         public FlightServiceTests()
         {
-            _service = new FlightService(new FakeRepository());
+            _service = new FlightService(new FakeRepository(), new Mock<ILogger<FlightService>>().Object);
         }
 
         [Fact]
