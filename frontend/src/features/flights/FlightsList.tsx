@@ -8,6 +8,7 @@ import FlightSearchForm from "./FlightSearchForm";
 import { motion, AnimatePresence } from "framer-motion"; //fade/slide-in animation for rows.
 import { useDispatch } from "react-redux";
 import { selectFlight } from "./flightsSlice";
+import SelectedFlight from "./SelectedFlight";
 
 const FlightsList = () => {
     const queryClient = useQueryClient();
@@ -152,14 +153,16 @@ const FlightsList = () => {
                                 </td>
                                 <td>
                                     <button onClick={() => dispatch(selectFlight(flight))}>
-                                        בחר טיסה
+                                        Details
                                     </button>
                                 </td>
                             </motion.tr>
                         ))}
                     </AnimatePresence>
                 </tbody>
-            </table>)}
+            </table>)
+        }
+        <SelectedFlight/>
     </>);
 };
 
