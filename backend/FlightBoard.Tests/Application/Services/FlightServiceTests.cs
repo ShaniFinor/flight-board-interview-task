@@ -18,7 +18,7 @@ namespace FlightBoard.Tests.Application.Services
 
         public FlightServiceTests()
         {
-            _service = new FlightService(new FakeRepository(), new Mock<ILogger<FlightService>>().Object);
+            _service = new FlightService(new FakeRepository(), new Mock<ILogger<FlightService>>().Object, null!);
         }
 
         [Fact]

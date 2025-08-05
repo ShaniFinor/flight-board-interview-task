@@ -34,7 +34,7 @@ namespace FlightBoard.Tests.Api.Controllers
 
         private class FakeFlightService : FlightService
         {
-            public FakeFlightService() : base(null! , new Mock<ILogger<FlightService>>().Object) { }
+            public FakeFlightService() : base(null! , new Mock<ILogger<FlightService>>().Object, null!) { }
 
             public override Task<List<Flight>> GetFlightsWithStatusAsync()
             {
