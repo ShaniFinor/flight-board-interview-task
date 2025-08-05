@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion"; //fade/slide-in animati
 import { useDispatch } from "react-redux";
 import { selectFlight } from "../store/flightsSlice";
 import SelectedFlight from "./SelectedFlight";
-//demo comment.
+
 const FlightsList = () => {
     const queryClient = useQueryClient();
     const [filters, setFilters] = useState<{ status?: string; destination?: string }>({});
