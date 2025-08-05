@@ -1,13 +1,12 @@
-//components/..
 import React, { useEffect, useState } from "react";
-import { useFlights, deleteFlight, useSearchFlights } from "./api";
-import { Flight } from "./flight";
+import { useFlights, deleteFlight, useSearchFlights } from "../api/api";
+import { Flight } from "../types/flight";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { connection } from './signalR';
+import { connection } from '../signalR/signalR';
 import FlightSearchForm from "./FlightSearchForm";
 import { motion, AnimatePresence } from "framer-motion"; //fade/slide-in animation for rows.
 import { useDispatch } from "react-redux";
-import { selectFlight } from "./flightsSlice";
+import { selectFlight } from "../store/flightsSlice";
 import SelectedFlight from "./SelectedFlight";
 
 const FlightsList = () => {

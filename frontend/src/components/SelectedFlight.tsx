@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../app/store';
-import { clearSelectedFlight } from './flightsSlice';
+import { RootState } from '../store/store';
+import { clearSelectedFlight } from '../store/flightsSlice';
 import './SelectedFlight.css';
 
 const SelectedFlight = () => {

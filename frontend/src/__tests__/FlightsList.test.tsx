@@ -1,12 +1,12 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import FlightsList from '../FlightsList';
+import FlightsList from '../components/FlightsList';
 import { Provider } from 'react-redux';
-import { store } from '../../../app/store';
+import { store } from '../store/store';
 
 //useFlights,api mock
-jest.mock('../api', () => ({
+jest.mock('../api/api', () => ({
   useFlights: () => ({
     data: [],
     isLoading: false,

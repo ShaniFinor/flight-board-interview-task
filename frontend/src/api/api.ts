@@ -1,8 +1,7 @@
-//api/..
 // using TanStack Query (React Query) to fetch flights from the server.
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import { Flight } from './flight';
+import { Flight } from '../types/flight';
 
 const BASE_URL = 'http://localhost:5264/api/flights';
 

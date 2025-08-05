@@ -1,4 +1,3 @@
-//types/..
 export interface Flight {
   flightNumber: string;
   destination: string;

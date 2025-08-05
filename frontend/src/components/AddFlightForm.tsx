@@ -1,8 +1,7 @@
-//components/
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Flight } from "./flight";
-import { addFlight } from "./api";
+import { Flight } from "../types/flight";
+import { addFlight } from '../api/api';
 import "./AddFlightForm.css";
 
 const initialForm = {

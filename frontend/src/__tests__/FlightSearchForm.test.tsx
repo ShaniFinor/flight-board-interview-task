@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
-import FlightSearchForm from '../FlightSearchForm';
+import FlightSearchForm from '../components/FlightSearchForm';
 
 describe('FlightSearchForm', () => {
   test('calls onSearch with correct values', () => {

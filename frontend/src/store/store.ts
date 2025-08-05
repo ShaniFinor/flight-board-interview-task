@@ -1,6 +1,5 @@
-//store/..
 import { configureStore } from "@reduxjs/toolkit";
-import flightsReducer from "../features/flights/flightsSlice";
+import flightsReducer from "../store/flightsSlice";
 
 //Redux store - create state managment 
 export const store = configureStore({

@@ -1,10 +1,10 @@
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
-import SelectedFlight from '../SelectedFlight';
+import SelectedFlight from '../components/SelectedFlight';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import flightsReducer from '../flightsSlice';
-import { RootState } from '../../../app/store';
+import flightsReducer from '../store/flightsSlice';
+import { RootState } from '../store/store';
 
 
 //render with store of Redux

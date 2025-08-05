@@ -1,11 +1,11 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import AddFlightForm from '../AddFlightForm';
+import AddFlightForm from '../components/AddFlightForm';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import * as api from '../api';
+import * as api from '../api/api';
 import '@testing-library/jest-dom';
 
-jest.mock('../api'); // create mock to addFligh func
+jest.mock('../api/api'); // create mock to addFligh func
 
 describe('AddFlightForm', () => {
   const mockAddFlight = api.addFlight as jest.Mock;

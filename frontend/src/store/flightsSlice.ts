@@ -1,6 +1,6 @@
-//store/..
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {Flight} from "./flight";
+import {Flight} from "../types/flight";
+
 interface FlightsState{
     selectedFlight: Flight |null;
 }
