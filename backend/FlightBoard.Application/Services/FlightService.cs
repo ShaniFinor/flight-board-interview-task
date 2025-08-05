@@ -1,5 +1,6 @@
 using FlightBoard.Domain.Entities;
 using FlightBoard.Infrastructure.Repositories;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
 namespace FlightBoard.Application.Services
@@ -8,16 +9,26 @@ namespace FlightBoard.Application.Services
     {
         private readonly FlightRepository _repository;
         private readonly ILogger<FlightService> _logger;
-        public FlightService(FlightRepository repository, ILogger<FlightService> logger)
+        private readonly IMemoryCache _cache;
+        public FlightService(FlightRepository repository, ILogger<FlightService> logger, IMemoryCache cache)
         {
             _repository = repository;
             _logger = logger;
+            _cache = cache;
         }
 
         public virtual async Task<List<Flight>> GetFlightsWithStatusAsync()
         {
-            _logger.LogInformation("Fetching all flights");
-            var flights = await _repository.GetAllFlightsAsync();
+            _logger.LogInformation("Checking cache for flights");
+
+            var flights = await _cache.GetOrCreateAsync("flights_cache", async entry =>
+            {
+                _logger.LogInformation("Cache miss – loading from repository");
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2);
+
+                var freshFlights = await _repository.GetAllFlightsAsync();
+                return freshFlights;
+            });
 
             foreach (var flight in flights)
             {
@@ -47,6 +58,7 @@ namespace FlightBoard.Application.Services
             _logger.LogInformation("Adding new flight: {@Flight}", flight);
             await _repository.AddFlightAsync(flight);
             _logger.LogInformation("Flight added successfully: {FlightNumber}", flight.FlightNumber);
+            _cache.Remove("flights_cache"); // refresh cache.
         }
 
         public virtual async Task DeleteFlightAsync(string flightNumber)
@@ -60,6 +72,7 @@ namespace FlightBoard.Application.Services
             }
             await _repository.DeleteFlightAsync(flightNumber);
             _logger.LogInformation("Flight with number {FlightNumber} deleted successfully", flightNumber);
+            _cache.Remove("flights_cache"); // refresh cache.
         }
 
         public string GetStatus(DateTime departureTime)
