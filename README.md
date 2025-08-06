@@ -59,3 +59,15 @@ Client-side + server-side validations.
 Clean Architecture & separation of concerns.
 Structured logging & test.
 Docker support for full containerization.
+
+Docker:
+docker compose build --no-cache
+docker compose up
+
+Frontend – http://localhost:3000
+Backend (Swagger) – http://localhost:5000/swagger
+
+after change:
+docker compose down --rmi all -v
+docker compose build --no-cache
+docker compose up

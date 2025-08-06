@@ -3,7 +3,8 @@ import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { Flight } from '../types/flight';
 
-const BASE_URL = 'http://localhost:5264/api/flights';
+const apiUrl = process.env.REACT_APP_API_BASE_URL!;
+const BASE_URL = `${apiUrl}/api/flights`;
 
 //Get/api/flights
 export const fetchFlights = async (): Promise<Flight[]> => {
@@ -21,7 +22,7 @@ export const useFlights = () => {
 };
 
 export async function addFlight(flight: Omit<Flight, 'status'>): Promise<Flight> {
-  const response = await fetch('http://localhost:5264/api/flights', {
+  const response = await fetch(BASE_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -37,7 +38,7 @@ export async function addFlight(flight: Omit<Flight, 'status'>): Promise<Flight>
 }
 
 export const deleteFlight = async (flightNumber: string) => {
-  await fetch(`/api/flights/${flightNumber}`, {
+  await fetch(`${BASE_URL}/${flightNumber}`, {
     method: 'DELETE'
   });
 };
@@ -47,7 +48,7 @@ export const searchFlights = async (filters: { status?: string; destination?: st
   if (filters.status) params.append("status", filters.status);
   if (filters.destination) params.append("destination", filters.destination);
 
-  const response = await fetch(`/api/flights/search?${params.toString()}`);
+  const response = await fetch(`${BASE_URL}/search?${params.toString()}`);
   if (!response.ok) throw new Error("Failed to search flights");
   return response.json();
 };

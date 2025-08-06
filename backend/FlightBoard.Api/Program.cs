@@ -9,6 +9,7 @@ using System.Text.Json;
 using FluentValidation.AspNetCore;
 using FluentValidation;
 using FlightBoard.Application.Validators;
+using FlightBoard.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,7 +42,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        policy.WithOrigins("http://localhost:3000", "http://flightboard-frontend")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -58,10 +59,45 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.MapHub<FlightsHub>("/flightsHub");
 
 app.MapControllers();
+
+if (app.Environment.IsProduction())
+{
+    app.Urls.Add("http://0.0.0.0:80");
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<FlightDbContext>();
+    db.Database.Migrate();
+
+    // Seed data - if the table is empty.
+    if (!db.Flights.Any())
+    {
+        db.Flights.AddRange(
+            new Flight
+            {
+                FlightNumber = "AA123",
+                Destination = "New York",
+                DepartureTime = DateTime.UtcNow.AddHours(2),
+                Status = "On Time",
+                Gate = "A1"
+            },
+            new Flight
+            {
+                FlightNumber = "BA456",
+                Destination = "London",
+                DepartureTime = DateTime.UtcNow.AddHours(4),
+                Status = "Delayed",
+                Gate = "B2"
+            }
+        );
+        db.SaveChanges();
+    }
+}
 
 app.Run();

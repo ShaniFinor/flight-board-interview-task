@@ -20,7 +20,7 @@ const FlightsList = () => {
     const flights = showFiltered ? filteredQuery.data : flightsQuery.data;
     const isLoading = showFiltered ? filteredQuery.isLoading : flightsQuery.isLoading;
     const isError = showFiltered ? filteredQuery.isError : flightsQuery.isError;
-
+    console.log("API URL: ", process.env.REACT_APP_API_BASE_URL);
 
     const handleDelete = (flightNumber: string) => {
         deleteMutation.mutate(flightNumber);
@@ -161,7 +161,7 @@ const FlightsList = () => {
                 </tbody>
             </table>)
         }
-        <SelectedFlight/>
+        <SelectedFlight />
     </>);
 };
 
