@@ -1,19 +1,16 @@
-version: '3.9'
 
 services:
   backend:
     build:
-      context: ./backend/FlightBoard.Api
-      dockerfile: Dockerfile
+      context: ./backend
+      dockerfile: FlightBoard.Api/Dockerfile
     ports:
       - "5000:80"
+    container_name: flightboard-backend
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80
-    depends_on:
-      - frontend
     volumes:
-      - ./backend/FlightBoard.Api/flightboard.db:/app/flightboard.db
+      - flightboard_data:/app
 
   frontend:
     build:
@@ -23,3 +20,7 @@ services:
       - "3000:80"
     depends_on:
       - backend
+    container_name: flightboard-frontend
+
+volumes:
+  flightboard_data:
